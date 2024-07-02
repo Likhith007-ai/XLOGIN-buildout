@@ -4,14 +4,18 @@ import "./App.css";
 function App() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (userName === "user" && password === "password") {
-      setMessage("Welcome, User");
+      setError("");
+      setIsSubmitted(true);
     } else {
-      setMessage("Invalid username or password");
+      setError("Invalid username or password");
+      setIsSubmitted(false);
     }
   };
 
@@ -19,28 +23,34 @@ function App() {
     <div className="App">
       <div className="login-container">
         <h1>Login Page</h1>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Username:
+        {isSubmitted ? (
+          <div>
+            <p>Welcome,{userName}!</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            {error && <p>{error}</p>}
+            <label>Username:</label>
             <input
               placeholder="Username"
               type="text"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              required
             />
-          </label>
-          <label>
-            Password:
+
+            <label>Password:</label>
             <input
               placeholder="Password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
-          </label>
-          <button type="submit">Submit</button>
-        </form>
-        {message && <p className="message">{message}</p>}
+
+            <button type="submit">Submit</button>
+          </form>
+        )}
       </div>
     </div>
   );
